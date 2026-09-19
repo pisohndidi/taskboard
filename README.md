@@ -9,6 +9,8 @@
 
    [![Maintainability](https://qlty.sh/gh/pisohndidi/projects/taskboard/maintainability.svg)](https://qlty.sh/gh/pisohndidi/projects/taskboard)
 
+   ![Демонстрация работы](./demo.gif)
+
 ## Возможности
 
 - Регистрация и вход (JWT), пароли хранятся как bcrypt-хэши
@@ -82,8 +84,7 @@ npm test
 
 ## Деплой
 
-Ссылка на рабочую версию: **REPLACE_ME_DEPLOY_URL**
-
+Ссылка на рабочую версию: https://taskboard-frontend-n3gs.onrender.com
 Инструкция по деплою на Render — в `DEPLOY.md`.
 
 ## API
