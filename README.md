@@ -7,7 +7,7 @@
 из каталога [project-based-learning](https://github.com/practical-tutorials/project-based-learning),
 реализован самостоятельно на стеке Node.js/Express + PostgreSQL + React.
 
-[![Maintainability](https://api.codeclimate.com/v1/badges/REPLACE_ME/maintainability)](https://codeclimate.com/github/REPLACE_ME/maintainability)
+   [![Maintainability](https://qlty.sh/gh/pisohndidi/projects/taskboard/maintainability.svg)](https://qlty.sh/gh/pisohndidi/projects/taskboard)
 
 ## Возможности
 
