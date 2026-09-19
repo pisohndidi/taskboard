@@ -24,21 +24,38 @@ git push -u origin main
 (Settings → Developer settings → Personal access tokens → Generate new token,
 scope `repo`).
 
-## Шаг 2. Подключить Code Climate (для бейджа A/B)
+## Шаг 2. Подключить Qlty Cloud (для бейджа A/B, бывший Code Climate)
 
-1. Зайдите на https://codeclimate.com/, войдите через GitHub
-2. "Add a repository" → выберите ваш `taskboard`
-3. После первого анализа откройте вкладку **Repo Settings → Badges**
-4. Скопируйте markdown вида:
-   ```
-   [![Maintainability](https://api.codeclimate.com/v1/badges/XXXXXXX/maintainability)](...)
-   ```
-5. Замените `REPLACE_ME` в `README.md` (в корне и в бейдже) на этот код, закоммитьте:
-   ```bash
-   git add README.md
-   git commit -m "docs: add Code Climate badge"
-   git push
-   ```
+Code Climate переехал на **Qlty Cloud** — регистрация и бейдж теперь там.
+
+1. Зайдите на https://qlty.sh/, войдите через GitHub
+2. Создайте/выберите workspace → **Projects** → добавьте репозиторий `taskboard`
+3. После первого анализа откройте вкладку **Settings** проекта — там будет готовый
+   markdown бейджа (для этого репозитория — уже подключено):
+   [![Maintainability](https://qlty.sh/gh/pisohndidi/projects/taskboard/maintainability.svg)](https://qlty.sh/gh/pisohndidi/projects/taskboard)
+
+4. Нажмите **Apply** — дождитесь, пока все сервисы соберутся (5-10 минут)
+5. Миграции и сид тестовых данных выполняются **автоматически** при каждом
+   старте backend-контейнера (см. `backend/docker-entrypoint.sh`) — отдельно
+   ничего запускать не нужно даже на бесплатном тарифе Render, где вкладка
+   **Shell** недоступна. В логах `taskboard-backend` вы увидите:
+   ==> Running database migration...
+   Migration applied successfully.
+   ==> Running database seed...
+   Seed complete.
+   Demo login: demo@taskboard.dev / demo12345
+   ==> Starting server...
+6. Откройте URL сервиса `taskboard-frontend` (что-то вроде
+   `https://taskboard-frontend.onrender.com`) — это и есть рабочий деплой.
+7. **Важно:** Render присваивает backend-сервису случайный суффикс в адресе
+   (например `taskboard-backend-ofu4.onrender.com`, а не ровно
+   `taskboard-backend.onrender.com`). После первого деплоя проверьте реальный
+   URL backend-сервиса в дашборде Render и убедитесь, что у
+   `taskboard-frontend` переменная `VITE_API_URL` указывает именно на него
+   (`https://<реальный-адрес-backend>.onrender.com/api`). Обновите значение
+   и в `render.yaml` в репозитории (иначе при следующей синхронизации
+   Blueprint оно откатится на плейсхолдер), и в дашборде — затем передеплойте
+   фронтенд (Manual Deploy).
 
 ## Шаг 3. Деплой на Render
 
