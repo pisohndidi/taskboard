@@ -8,6 +8,17 @@ const router = express.Router();
 router.patch('/:cardId', requireBoardMember, async (req, res, next) => {
   try {
     const { title, description, due_date, list_id, position } = req.body;
+
+    // If moving the card to another list, make sure that list belongs to the
+    // same board the user was authorized against — otherwise a member could
+    // move a card into a list on a board they don't have access to.
+    if (list_id) {
+      const target = await pool.query('SELECT board_id FROM lists WHERE id = $1', [list_id]);
+      if (!target.rows[0] || target.rows[0].board_id !== req.boardId) {
+        return res.status(400).json({ error: 'Список назначения принадлежит другой доске' });
+      }
+    }
+
     const result = await pool.query(
       `UPDATE cards SET
          title = COALESCE($1, title),
