@@ -3,5 +3,6 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 RUN npm install --omit=dev
 COPY . .
+RUN chmod +x docker-entrypoint.sh
 EXPOSE 4000
-CMD ["node", "src/server.js"]
+CMD ["./docker-entrypoint.sh"]

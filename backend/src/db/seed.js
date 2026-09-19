@@ -18,6 +18,20 @@ async function seed() {
   );
   const userId = userResult.rows[0].id;
 
+  // Idempotent: if the demo board already exists (e.g. this script runs on every
+  // container boot), skip re-creating boards/lists/cards/labels so restarts don't
+  // pile up duplicates.
+  const existing = await pool.query(
+    `SELECT id FROM boards WHERE owner_id = $1 AND title = 'Демо-доска'`,
+    [userId]
+  );
+  if (existing.rows[0]) {
+    console.log('Seed skipped: demo board already exists.');
+    console.log(`Demo login: ${DEMO_EMAIL} / ${DEMO_PASSWORD}`);
+    await pool.end();
+    return;
+  }
+
   const boardResult = await pool.query(
     `INSERT INTO boards (title, description, owner_id)
      VALUES ('Демо-доска', 'Пример доски для проверки проекта', $1)
